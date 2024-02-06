@@ -1,4 +1,5 @@
 import { connectDatabase, closeDatabase } from "../database/database.js";
+import { ObjectId } from "mongodb";
 
 // Create a venue
 // POST
@@ -53,17 +54,77 @@ export const createVenue = async (req, res) => {
 // Update venue details
 
 export const updateVenue = async (req, res) => {
-  let session;
   try {
     const database = await connectDatabase();
-  } catch (error) {}
+    const venueId = req.params.id;
+    const { title, location, website, phone, email } = req.body;
+
+    const updateResult = await database
+      .collection("venues")
+      .updateOne(
+        { _id: new ObjectId(venueId) },
+        { $set: { title, location, website, phone, email } }
+      );
+
+    if (updateResult.matchedCount === 0) {
+      return res.status(404).json({ error: "Venue not found" });
+    }
+
+    if (updateResult.modifiedCount === 1) {
+      res.status(200).json({ message: "Venue updated successfully" });
+    } else {
+      res.status(200).json({ message: "No changes made to the venue" });
+    }
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the venue" });
+  } finally {
+    await closeDatabase();
+  }
 };
 
 // DELETE
 // A venue
 
+export const deleteVenue = async (req, res) => {
+  try {
+    const database = await connectDatabase();
+    const venueId = req.params.id;
+
+    const _id = new ObjectId(venueId);
+
+    const deleteResult = await database.collection("venues").deleteOne({ _id });
+
+    if (deleteResult.deletedCount === 0) {
+      return res.status(404).json({ error: "Venue not found" });
+    }
+    res.status(200).json({ message: "Venue deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the venue" });
+  } finally {
+    await closeDatabase();
+  }
+};
+
 // GET
 // All venues
+
+export const allVenues = async (req, res) => {
+  try {
+    const database = await connectDatabase();
+    const venues = await database.collection("venues").find().toArray();
+    res.status(200).json(venues);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    await closeDatabase();
+  }
+};
 
 // GET
 // All events for a specific venue
