@@ -48,6 +48,32 @@ export const createEvent = async (req, res) => {
 // Get a single event by ID
 // GET
 
+export const singleEventById = async (req, res) => {
+  try {
+    const database = await connectDatabase();
+    const events = await database.collection("events");
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ error: "Missing event ID" });
+    }
+
+    const query = { _id: new ObjectId(id) };
+    const options = {};
+    const eventHandler = await events.findOne(query, options);
+
+    if (!eventHandler) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    res.send(eventHandler);
+  } catch (error) {
+    console.error("Error fetching event by ID:", error);
+    res.status(500).json({ error: "internal server error" });
+  } finally {
+    await closeDatabase();
+  }
+};
 // Get all ticket types for a specitic event
 // GET
 
