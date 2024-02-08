@@ -5,7 +5,7 @@ import {
 } from "../controllers/ticketsController.js";
 const router = express.Router();
 
-router.post("/events/:event_ID/tickets", createTicket);
-router.delete("/events/:id", deleteTicket);
+router.post("/:event_ID/tickets", createTicket);
+router.delete("/:id", deleteTicket);
 
 export default router;

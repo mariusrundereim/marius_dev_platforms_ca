@@ -22,9 +22,6 @@ export const createTicket = async (req, res) => {
       return res.status(404).json({ error: "Event not found" });
     }
 
-    // Optionally, retrieve venue details if needed
-    // const venue = await database.collection("venues").findOne({ _id: new ObjectId(event.venueId) });
-
     session = await database.client.startSession();
     session.startTransaction();
 

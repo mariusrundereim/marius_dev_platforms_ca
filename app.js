@@ -10,9 +10,9 @@ const app = express();
 app.use(express.json());
 
 app.use("/venues", venuesRoutes);
-app.use("/", eventsRoutes);
-app.use("/", ticketsRoutes);
-app.use("/", attendeesRoutes);
+app.use("/events", eventsRoutes);
+app.use("/events", ticketsRoutes);
+app.use("/attendees", attendeesRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port http://localhost:${port}`);
