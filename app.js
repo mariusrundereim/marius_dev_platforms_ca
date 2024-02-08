@@ -9,7 +9,7 @@ const port = process.env.PORT;
 const app = express();
 app.use(express.json());
 
-app.use("/", venuesRoutes);
+app.use("/venues", venuesRoutes);
 app.use("/", eventsRoutes);
 app.use("/", ticketsRoutes);
 app.use("/", attendeesRoutes);

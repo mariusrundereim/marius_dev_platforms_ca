@@ -74,7 +74,7 @@ export const singleEventById = async (req, res) => {
     await closeDatabase();
   }
 };
-// Get all ticket types for a specitic event
+// Get all ticket for a specitic event
 // GET
 
 // Get all feedback for a specific event
