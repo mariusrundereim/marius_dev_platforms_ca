@@ -14,6 +14,7 @@ app.use("/events", eventsRoutes);
 app.use("/events", ticketsRoutes);
 app.use("/attendees", attendeesRoutes);
 
+// Port listen
 app.listen(port, () => {
   console.log(`Server running on port http://localhost:${port}`);
 });
