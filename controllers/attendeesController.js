@@ -3,46 +3,52 @@ import { ObjectId } from "mongodb";
 
 // Create attendee
 // POST
-
 export const createAttendee = async (req, res) => {
-  let session;
   try {
     const database = await connectDatabase();
     const { firstName, lastName, email, phone, ticketId } = req.body;
+
     if (!firstName || !lastName || !email || !phone || !ticketId) {
       return res.status(400).json({ error: "Missing fields" });
     }
-    console.log(req.body);
 
-    const existingPerson = await database
+    const existingAttendee = await database
       .collection("attendees")
-      .findOne({ firstName: firstName, lastName: lastName, email: email });
-    if (existingPerson) {
-      return res.status(409).json({ error: "Attendee name already exists" });
-    }
+      .findOne({ email: email });
 
-    session = database.client.startSession();
+    if (existingAttendee) {
+      const updateResult = await database.collection("attendees").updateOne(
+        { email: email },
+        {
+          $addToSet: { tickets: ticketId },
+          $set: { firstName, lastName, phone },
+        }
+      );
 
-    try {
+      if (updateResult.matchedCount === 0) {
+        return res.status(404).json({ error: "Attendee not found" });
+      }
+
+      return res
+        .status(200)
+        .json({ message: "Ticket added to existing attendee" });
+    } else {
       const attendeesResult = await database
         .collection("attendees")
-        .insertOne(
-          { firstName, lastName, email, phone, ticketId },
-          { session }
-        );
-      await session.commitTransaction();
-      res.status(201).json({ insertedId: attendeesResult.insertedId });
-    } catch (error) {
-      await session.abortTransaction();
-      console.error(error);
-      res
-        .status(500)
-        .json({ error: "Failed to create the attendee, please try again" });
+        .insertOne({ firstName, lastName, email, phone, tickets: [ticketId] });
+
+      return res
+        .status(201)
+        .json({
+          insertedId: attendeesResult.insertedId,
+          message: `${firstName} is created successfully.`,
+        });
     }
   } catch (error) {
-    // Handle the error here
     console.error(error);
-    return res.status(500).json({ error: "Internal server error" });
+    res
+      .status(500)
+      .json({ error: "Failed to create the attendee, please try again" });
   } finally {
     await closeDatabase();
   }
@@ -63,7 +69,6 @@ export const getSingleAttendeeById = async (req, res) => {
     }
     res.status(200).json(attendee);
   } catch (error) {
-    // Handle the error here
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
   } finally {

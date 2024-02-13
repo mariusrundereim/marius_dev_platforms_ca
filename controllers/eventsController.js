@@ -74,6 +74,36 @@ export const singleEventById = async (req, res) => {
     await closeDatabase();
   }
 };
+
+// Get all tickets for a specific event
+// GET
+
+export const getTicketsByEvent = async (req, res) => {
+  try {
+    const database = await connectDatabase();
+    const { id } = req.params;
+    const event = await database
+      .collection("events")
+      .findOne({ _id: new ObjectId(id) });
+
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    const tickets = await database
+      .collection("tickets")
+      .find({ eventId: new ObjectId(id) })
+      .toArray();
+
+    res.status(200).json(tickets);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    await closeDatabase();
+  }
+};
+
 // Get all ticket for a specitic event
 // GET
 
