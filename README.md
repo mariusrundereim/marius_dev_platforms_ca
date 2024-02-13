@@ -4,14 +4,14 @@
 
 Course Assignment for Development Platforms. Goal is to create and host a functional RESTful API.
 Focus will be to understand datastores and backend solutions commonly used in a full-stack web development.
-This project will demonstrate my ability to implement CRUD (Create, Read, Update, Delete) REST endpoints.
+This project will demonstrate my ability to implement **CRUD (Create, Read, Update, Delete)** REST endpoints.
 
 ## Learning outcomes
 
 - Service and APIs used to deliver intergrated full-stack solutions.
 - Processes and tools used in front-end projects with cloud-based backend platforms and self-hosted APIs.
 
-## Prerequisites
+## Stack
 
 - Node.js
 - MongoDB
