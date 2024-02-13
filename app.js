@@ -2,6 +2,9 @@ import express from "express";
 import "dotenv/config.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
+import { options } from "./swaggerOptions.js";
+
+// Import routes
 import venuesRoutes from "./routes/venuesRoutes.js";
 import eventsRoutes from "./routes/eventsRoutes.js";
 import ticketsRoutes from "./routes/ticketsRoutes.js";
@@ -13,30 +16,10 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Event Management API",
-      version: "1.0.0",
-      description:
-        "This is a simple API for managing events, venues, tickets, attendees, and companies",
-    },
-    servers: [
-      {
-        url: `http://localhost:${port}`,
-      },
-    ],
-  },
-  // Make sure paths here match your project structure
-  apis: ["./routes/*.js"], // Adjust the path as necessary
-};
+const swaggerDocs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-const swaggerSpecs = swaggerJsdoc(swaggerOptions);
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
-
-// Route middlewares
+// Routes
 app.use("/venues", venuesRoutes);
 app.use("/events", eventsRoutes);
 app.use("/events", ticketsRoutes);
