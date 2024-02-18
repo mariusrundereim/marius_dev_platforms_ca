@@ -1,8 +1,5 @@
 import express from "express";
 import "dotenv/config.js";
-import swaggerUi from "swagger-ui-express";
-import swaggerJsdoc from "swagger-jsdoc";
-import { options } from "./swaggerOptions.js";
 
 // Import routes
 import venuesRoutes from "./routes/venuesRoutes.js";
@@ -16,17 +13,13 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const swaggerDocs = swaggerJsdoc(options);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
 // Routes
 app.use("/venues", venuesRoutes);
 app.use("/events", eventsRoutes);
-app.use("/events", ticketsRoutes);
+app.use("/tickets", ticketsRoutes);
 app.use("/attendees", attendeesRoutes);
 app.use("/companies", companiesRoutes);
 
-// Port
 app.listen(port, () => {
   console.log(`Server running on port http://localhost:${port}`);
 });

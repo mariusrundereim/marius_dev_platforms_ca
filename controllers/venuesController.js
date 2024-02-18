@@ -1,6 +1,31 @@
 import { connectDatabase, closeDatabase } from "../database/database.js";
 import { ObjectId } from "mongodb";
 
+// GET
+// All events for a specific venue
+
+export const getSingleVenueById = async (req, res) => {
+  try {
+    const database = await connectDatabase();
+    const venueId = req.params.id;
+    const venue = await database
+      .collection("venues")
+      .findOne({ _id: new ObjectId(venueId) });
+
+    if (!venue) {
+      return res.status(404).json({ error: "Venue not found" });
+    }
+    res.status(200).json(venue);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the venue" });
+  } finally {
+    await closeDatabase();
+  }
+};
+
 // Create a venue
 // POST
 
@@ -125,6 +150,3 @@ export const allVenues = async (req, res) => {
     await closeDatabase();
   }
 };
-
-// GET
-// All events for a specific venue

@@ -1,11 +1,54 @@
 import { connectDatabase, closeDatabase } from "../database/database.js";
 import { ObjectId } from "mongodb";
 
+// GET
+// Get all tickets
+
+export const getAllTickets = async (req, res) => {
+  try {
+    const database = await connectDatabase();
+    const tickets = await database.collection("tickets").find({}).toArray();
+    res.status(200).json({ tickets });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred while fetching tickets" });
+  } finally {
+    await closeDatabase();
+  }
+};
+
+// GET
+// Get all tickets for a specific event
+
+export const ticketsForSpecificEvent = async (req, res) => {
+  try {
+    const database = await connectDatabase();
+    const eventId = req.params.event_ID;
+    const tickets = await database
+      .collection("tickets")
+      .find({ eventId: new ObjectId(eventId) })
+      .toArray();
+
+    if (tickets.length === 0) {
+      return res.status(404).json({ error: "No tickets found for this event" });
+    }
+
+    res.status(200).json({ tickets });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching event tickets" });
+  } finally {
+    await closeDatabase();
+  }
+};
+
 // POST
 // Create a ticket for an event
 
 export const createTicket = async (req, res) => {
-  let session = null; // Initialize session variable outside try to check its state later
+  let session = null;
   try {
     const database = await connectDatabase();
     session = await database.client.startSession();
@@ -14,7 +57,6 @@ export const createTicket = async (req, res) => {
     const { price, quantity, attendeeId } = req.body;
 
     if (!eventId || !price || !quantity || !attendeeId) {
-      // Make sure to not use session after this point if it's not needed
       return res
         .status(400)
         .json({ error: "Missing fields for Ticket creation" });
@@ -77,72 +119,6 @@ export const createTicket = async (req, res) => {
     await closeDatabase();
   }
 };
-
-/*
-export const createTicket = async (req, res) => {
-  let session;
-  try {
-    const database = await connectDatabase();
-    const eventId = req.params.event_ID;
-    const { title, price, quantity } = req.body;
-
-    if (!eventId || !title || !price || !quantity) {
-      return res.status(400).json({ error: "Missing fields for Ticket" });
-    }
-
-    // Verify the event exists and retrieve details
-    const event = await database
-      .collection("events")
-      .findOne({ _id: new ObjectId(eventId) });
-    if (!event) {
-      return res.status(404).json({ error: "Event not found" });
-    }
-
-    session = await database.client.startSession();
-    session.startTransaction();
-
-    // Insert the ticket
-
-    const ticketResult = await database.collection("tickets").insertOne(
-      {
-        eventId: new ObjectId(eventId),
-        title,
-        price,
-        quantity,
-      },
-      { session }
-    );
-
-    await session.commitTransaction();
-
-    res.status(201).json({
-      ticket: {
-        insertedId: ticketResult.insertedId,
-        title,
-        price,
-        quantity,
-      },
-      event: {
-        title: event.title,
-        startDate: event.startDate,
-        endDate: event.endDate,
-        // Optionally include venue details
-        // venue: { title: venue.title, location: venue.location }
-      },
-    });
-  } catch (error) {
-    if (session) {
-      await session.abortTransaction();
-    }
-    console.error(error);
-    res.status(500).json({ error: "Failed to create the ticket" });
-  } finally {
-    if (session) {
-      session.endSession();
-    }
-  }
-};
-*/
 
 // PUT
 // Update ticket details

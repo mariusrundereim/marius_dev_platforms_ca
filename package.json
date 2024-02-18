@@ -5,8 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon app.js",
-    "generate-swagger-doc": "swagger-jsdoc -d swaggerOptions.js -o swaggerOutput.json"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",

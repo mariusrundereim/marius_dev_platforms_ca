@@ -33,6 +33,14 @@ This project will demonstrate my ability to implement **CRUD (Create, Read, Upda
 - `GET /events`: List all events.
 - `POST /events`: Create a new event.
 
+```json
+{
+  "price": 100,
+  "quantity": 1,
+  "attendeeId": "65ca47cac9a1cd5469eb8404"
+}
+```
+
 ### Tickets
 
 - `POST /events/:eventId/tickets`: Create a ticket for an event.
@@ -47,3 +55,7 @@ This project will demonstrate my ability to implement **CRUD (Create, Read, Upda
 
 - `GET /companies`: List all companies.
 - `POST /companies`: Add a new company.
+
+```
+
+```
