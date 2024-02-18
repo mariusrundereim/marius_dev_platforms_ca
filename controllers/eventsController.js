@@ -103,9 +103,3 @@ export const getTicketsByEvent = async (req, res) => {
     await closeDatabase();
   }
 };
-
-// Get all ticket for a specitic event
-// GET
-
-// Get all feedback for a specific event
-// GET
