@@ -4,11 +4,14 @@ import {
   getSingleAttendeeById,
   deleteAttendee,
   updateAttendee,
+  getAllAttendees,
 } from "../controllers/attendeesController.js";
 const router = express.Router();
 
-router.post("/", createAttendee);
+// Get all attendees
+router.get("/", getAllAttendees);
 router.get("/:id", getSingleAttendeeById);
+router.post("/", createAttendee);
 router.delete("/:id", deleteAttendee);
 router.patch("/:id", updateAttendee);
 

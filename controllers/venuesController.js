@@ -30,11 +30,9 @@ export const getSingleVenueById = async (req, res) => {
 // POST
 
 export const createVenue = async (req, res) => {
-  let session;
   try {
     const database = await connectDatabase();
     const { title, location, website, phone, email } = req.body;
-    console.log(req.body);
 
     if (!title || !location || !website || !phone || !email) {
       return res.status(400).json({ error: "Missing fields" });
@@ -47,30 +45,20 @@ export const createVenue = async (req, res) => {
       return res.status(409).json({ error: "Venue name already exists" });
     }
 
-    session = database.client.startSession();
-
-    try {
-      //Start transaction
-      const venuesResult = await database
-        .collection("venues")
-        .insertOne({ title, location, website, phone, email }, { session });
-      await session.commitTransaction();
-      res.status(201).json({ insertedId: venuesResult.insertedId });
-    } catch (error) {
-      //if an error occurs, abort it
-      await session.abortTransaction();
-      console.error(error);
-      res
-        .status(500)
-        .json({ error: "Failed to create the venue, please try again" });
-    } finally {
-      session.endSession();
-    }
+    const venuesResult = await database
+      .collection("venues")
+      .insertOne({ title, location, website, phone, email });
+    res.status(201).json({
+      venueId: venuesResult.insertedId,
+      message: `${title} created successfully.`,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "An error occurred on the server" });
+    res
+      .status(500)
+      .json({ error: "Failed to create the venue, please try again" });
   } finally {
-    // Database connection closed
+    // It seems there was a call to closeDatabase here; ensure this is handled appropriately.
     await closeDatabase();
   }
 };

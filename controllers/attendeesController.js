@@ -1,6 +1,21 @@
 import { connectDatabase, closeDatabase } from "../database/database.js";
 import { ObjectId } from "mongodb";
 
+// Get all attendees
+// GET
+export const getAllAttendees = async (req, res) => {
+  try {
+    const database = await connectDatabase();
+    const attendees = await database.collection("attendees").find({}).toArray();
+    res.status(200).json(attendees);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    await closeDatabase();
+  }
+};
+
 // Create attendee
 // POST
 export const createAttendee = async (req, res) => {
@@ -8,7 +23,7 @@ export const createAttendee = async (req, res) => {
     const database = await connectDatabase();
     const { firstName, lastName, email, phone, ticketId } = req.body;
 
-    if (!firstName || !lastName || !email || !phone || !ticketId) {
+    if (!firstName || !lastName || !email || !phone) {
       return res.status(400).json({ error: "Missing fields" });
     }
 
@@ -17,13 +32,13 @@ export const createAttendee = async (req, res) => {
       .findOne({ email: email });
 
     if (existingAttendee) {
-      const updateResult = await database.collection("attendees").updateOne(
-        { email: email },
-        {
-          $addToSet: { tickets: ticketId },
-          $set: { firstName, lastName, phone },
-        }
-      );
+      const updateQuery = {
+        $set: { firstName, lastName, phone },
+      };
+
+      if (ticketId) {
+        updateQuery.$addToSet = { tickets: ticketId };
+      }
 
       if (updateResult.matchedCount === 0) {
         return res.status(404).json({ error: "Attendee not found" });
@@ -33,16 +48,18 @@ export const createAttendee = async (req, res) => {
         .status(200)
         .json({ message: "Ticket added to existing attendee" });
     } else {
-      const attendeesResult = await database
-        .collection("attendees")
-        .insertOne({ firstName, lastName, email, phone, tickets: [ticketId] });
+      const attendeesResult = await database.collection("attendees").insertOne({
+        firstName,
+        lastName,
+        email,
+        phone,
+        tickets: ticketId ? [ticketId] : [],
+      });
 
-      return res
-        .status(201)
-        .json({
-          insertedId: attendeesResult.insertedId,
-          message: `${firstName} is created successfully.`,
-        });
+      return res.status(201).json({
+        attendeeId: attendeesResult.insertedId,
+        message: `${firstName} ${lastName} created successfully.`,
+      });
     }
   } catch (error) {
     console.error(error);

@@ -51,7 +51,7 @@ export const createTicket = async (req, res) => {
   let session = null;
   try {
     const database = await connectDatabase();
-    session = await database.client.startSession();
+    session = database.client.startSession();
 
     const eventId = req.params.event_ID;
     const { price, quantity, attendeeId } = req.body;
@@ -61,30 +61,57 @@ export const createTicket = async (req, res) => {
         .status(400)
         .json({ error: "Missing fields for Ticket creation" });
     }
-
     session.startTransaction();
 
-    // Fetching
-    const [event, attendee, venue] = await Promise.all([
-      database
-        .collection("events")
-        .findOne({ _id: new ObjectId(eventId) }, { session }),
-      database
-        .collection("attendees")
-        .findOne({ _id: new ObjectId(attendeeId) }, { session }),
-      database
-        .collection("venues")
-        .findOne({ _id: new ObjectId(event.venueId) }, { session }),
-    ]);
+    const existingTicket = await database.collection("tickets").findOne(
+      {
+        eventId: new ObjectId(eventId),
+        attendeeId: new ObjectId(attendeeId),
+      },
+      { session }
+    );
 
-    if (!event || !attendee || !venue) {
+    if (existingTicket) {
       await session.abortTransaction();
+      session.endSession();
       return res
-        .status(404)
-        .json({ error: "Event, Attendee, or Venue not found" });
+        .status(409)
+        .json({ error: "Ticket for this event and attendee already exists" });
     }
 
-    // Insert
+    // Fetching the event
+    const event = await database
+      .collection("events")
+      .findOne({ _id: new ObjectId(eventId) }, { session });
+
+    if (!event) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    // Fetching the attendee
+    const attendee = await database
+      .collection("attendees")
+      .findOne({ _id: new ObjectId(attendeeId) }, { session });
+
+    if (!attendee) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ error: "Attendee not found" });
+    }
+
+    const venue = await database
+      .collection("venues")
+      .findOne({ _id: new ObjectId(event.venueId) }, { session });
+
+    if (!venue) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ error: "Venue not found" });
+    }
+
+    // Insert the ticket
     const ticketResult = await database.collection("tickets").insertOne(
       {
         eventId: new ObjectId(eventId),
@@ -93,9 +120,9 @@ export const createTicket = async (req, res) => {
         attendeeName: `${attendee.firstName} ${attendee.lastName}`,
         venueId: new ObjectId(event.venueId),
         venueLocation: venue.location,
-        price: price,
-        quantity: quantity,
-        companyName: venue.title,
+        price,
+        quantity,
+        companyName: event.title,
       },
       { session }
     );
@@ -104,19 +131,19 @@ export const createTicket = async (req, res) => {
 
     res.status(201).json({
       message: "Ticket created successfully",
-      ticket: ticketResult.ops[0],
+      ticketId: ticketResult.insertedId,
     });
   } catch (error) {
-    console.error(error);
-    if (session && session.inTransaction()) {
-      await session.abortTransaction();
-    }
-    res.status(500).json({ error: "Failed to create the ticket" });
-  } finally {
+    console.error("Error creating ticket:", error);
     if (session) {
-      await session.endSession(); // Ensures session ends only here
+      if (session.inTransaction()) {
+        await session.abortTransaction();
+      }
+      session.endSession();
     }
-    await closeDatabase();
+    res.status(500).json({
+      error: "Failed to create the ticket. Check server logs for details.",
+    });
   }
 };
 

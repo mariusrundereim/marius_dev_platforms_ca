@@ -2,6 +2,35 @@ import { connectDatabase, closeDatabase } from "../database/database.js";
 import { ObjectId } from "mongodb";
 
 // GET
+// Get company with events
+
+export const getCompaniesWithEvents = async (req, res) => {
+  try {
+    const database = await connectDatabase();
+    const companyId = req.params.id;
+    const company = await database
+      .collection("companies")
+      .findOne({ _id: new ObjectId(companyId) });
+
+    if (!company) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+
+    const events = await database
+      .collection("events")
+      .find({ companyId: new ObjectId(companyId) })
+      .toArray();
+
+    res.status(200).json({ company, events });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    await closeDatabase();
+  }
+};
+
+// GET
 // Get all companies
 
 export const getCompanies = async (req, res) => {
@@ -79,7 +108,10 @@ export const createCompany = async (req, res) => {
         { session }
       );
     await session.commitTransaction();
-    res.status(201).json({ insertedId: companiesResult.insertedId });
+    res.status(201).json({
+      companyId: companiesResult.insertedId,
+      message: `${companyName} created successfully.`,
+    });
   } catch (error) {
     if (session) {
       await session.abortTransaction();
