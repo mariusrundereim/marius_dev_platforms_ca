@@ -8,8 +8,6 @@
 - Attendees
 - Companies
 
-This is endpoints for Venues.
-
 ## Venues
 
 ### Get All Venues

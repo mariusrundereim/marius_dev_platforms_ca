@@ -1,0 +1,666 @@
+{
+	"info": {
+		"_postman_id": "f0cbee2a-d5fd-4369-80c4-e05c65d74b6c",
+		"name": "DevPlatforms_CA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25894986"
+	},
+	"item": [
+		{
+			"name": "Venues",
+			"item": [
+				{
+					"name": "All venues",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/venues",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"venues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single venue",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/venues/65c34821042991ac6998e6eb",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"venues",
+								"65c34821042991ac6998e6eb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Venue",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Kodefestivalen\",\r\n  \"location\": \"Farsund\",\r\n  \"website\": \"http://kodefestivalen.com\",\r\n  \"phone\": \"40440404\",\r\n  \"email\": \"contact@kodefestivalen.com\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/venues/65c2516c28aa18473a7c840e",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"venues",
+								"65c2516c28aa18473a7c840e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a venue",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Kodefestivalen\",\r\n  \"location\": \"Vennesla\",\r\n  \"website\": \"http://kodefestivalen.com\",\r\n  \"phone\": \"40440404\",\r\n  \"email\": \"contact@kodefestivalen.com\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/venues/65c2511828aa18473a7c840c",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"venues",
+								"65c2511828aa18473a7c840c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Venue",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Noroff Campus Bergen\",\r\n  \"location\": \"Bergen\",\r\n  \"website\": \"http://www.noroff.no\",\r\n  \"phone\": \"44744555\",\r\n  \"email\": \"hei@noroff.no\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/venues",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"venues"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "This is endpoints for Venues.\n\n## New venue\n\n- **Endpoint** `/venues`\n- **Method**: POST\n- **Description**: Create a new venue.\n- **Success Response**: HTTP 201 (Created), returns created venue details.\n- **Error Response**: HTTP 400 (Bad Request), with error message.\n    \n    ``` json\n        {\n        \"title\":  \"string\",\n        \"location\":  \"string\",\n        \"website\":  \"string\",\n        \"phone\":  \"string\",\n        \"email\":  \"string\"\n        }\n    \n     ```\n    \n\n## All venues\n\n- **Endpoint**: `/venues`\n- **Method**: GET\n- **Description**: Retrieve a list of all venues.\n- **Success Response**: HTTP 200 (OK), returns an array of venue objects.\n    \n\n## Single Venue\n\n- **Endpoint**: `/venues/{venueId}`\n- **Method**: GET\n- **Description**: Fetch details of a specific venue using its unique ID.\n- **Success Response**: HTTP 200 (OK), returns venue details.\n- **Error Response**: HTTP 404 (Not Found), if venue ID does not exist.\n    \n\n## Update venue\n\n- **Method**: PUT\n- **Description**: Update existing venue details.\n- **Success Response**: HTTP 200 (OK), returns venue details.\n- **Error Response**: HTTP 404 (Not Found), if venue ID does not exist.\n- **Success Response**: HTTP 200 (OK), returns updated venue details.\n- **Error Response**: HTTP 404 (Not Found), if venue ID does not exist.\n    \n    ``` json\n        {\n        \"name\":  \"string\",\n        \"address\":  \"string\",\n        }\n    \n     ```\n    \n\n## Delete venue\n\n- **Endpoint**: `/venues/{venueId}`\n- **Method**: DELETE\n- **Description**: Remove a venue using its unique ID.\n- **Success Response**: HTTP 204 (No Content), venue successfully deleted.\n- **Error Response**: HTTP 404 (Not Found), if venue ID does not exist."
+		},
+		{
+			"name": "Tickets",
+			"item": [
+				{
+					"name": "All tickets",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tickets",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TicketsByEvent",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tickets/65c3498c042991ac6998e6ed",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tickets",
+								"65c3498c042991ac6998e6ed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete ticket",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Kodefestivalen\",\r\n  \"location\": \"Vennesla\",\r\n  \"website\": \"http://kodefestivalen.com\",\r\n  \"phone\": \"40440404\",\r\n  \"email\": \"contact@kodefestivalen.com\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tickets/65c49b5e88291a82b2179650",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tickets",
+								"65c49b5e88291a82b2179650"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Ticket",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"price\": 100, \r\n  \"quantity\": 1, \r\n  \"attendeeId\": \"65d3423e3d1a2ea5fda27ab6\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tickets/65d33efe5c4ffa84df86aed5/tickets",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tickets",
+								"65d33efe5c4ffa84df86aed5",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "This documentation provides detailed information on the endpoints for managing tickets, including methods, descriptions, expected responses, and required request bodies for creation.\n\n## Get all tickets\n\n- **Endpoint**: `/tickets`\n- **Method**: GET\n- **Description**: Retrieves a list of all tickets available.\n- **Success Response**: HTTP 200 (OK) with a JSON array of ticket objects.\n- **Error Response**: HTTP 500 (Internal Server Error) with an error message.\n    \n\n## Get tickets for Specific Event\n\n- **Endpoint**: `/tickets/:event_ID`\n- **Method**: GET\n- **Description**: Fetches all tickets associated with a specific event ID.\n- **Success Response**: HTTP 200 (OK) with tickets for the specified event.\n- **Error Response**: HTTP 404 (Not Found) if no tickets are found for the event, or HTTP 500 (Internal Server Error) with an error message.\n    \n\n## Create ticket\n\n- **Endpoint**: `/:event_ID/tickets`\n- **Method**: POST\n- **Description**: Creates a new ticket for an event, requiring price, quantity, and attendee ID.\n- **Body**:\n    \n    ``` json\n      {  \"price\":  \"number\",  \n      \"quantity\":  \"number\",  \n      \"attendeeId\":  \"string\"  \n      }\n    \n     ```\n    \n- **Success Response**: HTTP 201 (Created) with created ticket details.\n- **Error Response**: HTTP 400 (Bad Request) if required fields are missing, HTTP 404 (Not Found) if the event, attendee, or venue does not exist, or HTTP 500 (Internal Server Error) with an error message.\n    \n\n## Delete ticket\n\n- **Endpoint**: `/tickets/:id`\n- **Method**: DELETE\n- **Description**: Deletes a ticket by its ID.\n- **Success Response**: HTTP 200 (OK) with a message indicating successful deletion.\n- **Error Response**: HTTP 404 (Not Found) if the ticket does not exist, or HTTP 500 (Internal Server Error) with an error message."
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "All events",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/events",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single event",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/events/65c3498c042991ac6998e6ed",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"events",
+								"65c3498c042991ac6998e6ed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ticket Events",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/events/65c3498c042991ac6998e6ed/tickets",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"events",
+								"65c3498c042991ac6998e6ed",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Sprettball 2024\",\r\n  \"description\": \"Kom å bli med på en gøyal sprettballkonkurranse for barn.\",\r\n    \"startDate\": \"2024-03-08T16:00:00.000Z\",\r\n    \"endDate\": \"2024-03-08T19:00:00.000Z\",\r\n    \"venueId\": \"65c34821042991ac6998e6eb\",\r\n    \"companyId\": \"65ca066ff55050be2535d8cc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/events",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single event",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/events/65c3498c042991ac6998e6ed",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"events",
+								"65c3498c042991ac6998e6ed"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "## Create Event\n\n- **Endpoint**: `/events`\n- **Method**: GET (should be POST for creating resources)\n- **Description**: Creates a new event with title, description, start and end dates, and venue ID.\n- **Body**:\n    \n    ``` json\n    {\n      \"title\": \"string\",\n      \"description\": \"string\",\n      \"startDate\": \"date\",\n      \"endDate\": \"date\",\n      \"venueId\": \"string\"\n    }\n    \n     ```\n    \n- **Success Response**: HTTP 201 (Created) with the ID of the inserted event.\n- **Error Response**: HTTP 400 (Bad Request) if fields are missing, HTTP 404 (Not Found) if the venue does not exist, or HTTP 500 (Internal Server Error) with an error message.\n    \n\n## Single Event by ID\n\n- **Endpoint**: `/events/:id`\n- **Method**: GET\n- **Description**: Retrieves a single event by its unique ID.\n- **Success Response**: HTTP 200 (OK) with the event's details.\n- **Error Response**: HTTP 404 (Not Found) if the event does not exist, or HTTP 500 (Internal Server Error) with an error message.\n    \n\n## Get Tickets by Event\n\n- **Endpoint**: `/events/:id/tickets`\n- **Method**: GET\n- **Description**: Fetches all tickets for a specific event by the event's ID.\n- **Success Response**: HTTP 200 (OK) with an array of tickets for the event.\n- **Error Response**: HTTP 404 (Not Found) if the event does not exist, or HTTP 500 (Internal Server Error) with an error message."
+		},
+		{
+			"name": "Attendees",
+			"item": [
+				{
+					"name": "All Attendees",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/attendees",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"attendees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single Attendee",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/attendees/65ca47cac9a1cd5469eb8404",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"attendees",
+								"65ca47cac9a1cd5469eb8404"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete attendee",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/attendees/65cb7aef0c8aebbf242ea16f",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"attendees",
+								"65cb7aef0c8aebbf242ea16f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update attendee",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Leif\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/attendees/65c3d5f964d4354f37fadf38",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"attendees",
+								"65c3d5f964d4354f37fadf38"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Attendees",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Petter\",\r\n    \"lastName\": \"Hardald-Haga\",\r\n    \"email\": \"petterdenstore@gmail.com\",\r\n    \"phone\": \"99999480\",\r\n    \"ticketId\": \"\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/attendees",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"attendees"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "## Create Attendee\n\n- **Endpoint**: `/attendees`\n- **Method**: POST\n- **Description**: Registers a new attendee with first name, last name, email, phone, and ticket ID. If an attendee with the given email already exists, updates their tickets.\n- **Body**:\n    \n    ``` json\n    {\n      \"firstName\": \"string\",\n      \"lastName\": \"string\",\n      \"email\": \"string\",\n      \"phone\": \"string\",\n      \"ticketId\": \"string\"\n    }\n    \n     ```\n    \n- **Success Response**: HTTP 201 (Created) with message and insertedId for new attendees or HTTP 200 (OK) for adding tickets to existing attendees.\n- **Error Response**: HTTP 400 (Bad Request) for missing fields, HTTP 500 (Internal Server Error) with an error message.\n    \n\n## Get Single Attendee by ID\n\n- **Endpoint**: `/attendees/:id`\n- **Method**: GET\n- **Description**: Retrieves details of a single attendee by their unique ID.\n- **Success Response**: HTTP 200 (OK) with attendee's details.\n- **Error Response**: HTTP 404 (Not Found) if the attendee does not exist, HTTP 500 (Internal Server Error) with an error message.\n    \n\n## Delete Attendee\n\n- **Endpoint**: `/attendees/:id`\n- **Method**: DELETE\n- **Description**: Removes an attendee by their unique ID from the database.\n- **Success Response**: HTTP 200 (OK) with a message indicating successful deletion.\n- **Error Response**: HTTP 404 (Not Found) if the attendee does not exist, HTTP 500 (Internal Server Error) with an error message.\n    \n\n## Update Attendee\n\n- **Endpoint**: `/attendees/:id`\n- **Method**: PATCH\n- **Description**: Updates information for an attendee by their ID. Can update any field like firstName, lastName, email, or phone.\n- **Body**:\n    \n    ``` json\n    {\n      \"fieldName\": \"newValue\"\n    }\n    \n     ```\n    \n- **Success Response**: HTTP 200 (OK) with a message indicating successful update.\n- **Error Response**: HTTP 400 (Bad Request) if no update fields are provided, HTTP 404 (Not Found) if the attendee does not exist, HTTP 500 (Internal Server Error) with an error message."
+		},
+		{
+			"name": "Companies",
+			"item": [
+				{
+					"name": "All companies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/companies",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single company",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/companies/65ca07e90afa40d59d295dea",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"companies",
+								"65ca07e90afa40d59d295dea"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Company Events",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/companies/65cb76e8a9401f2122b32e9f/events",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"companies",
+								"65cb76e8a9401f2122b32e9f",
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"companyName\": \"Himmel Event\",\r\n    \"orgNumber\": 998888700,\r\n    \"email\": \"himmelevent@event.no\",\r\n    \"phone\": \"88855851\",\r\n    \"address\": \"Mellombro 44, 0579 Oslo\",\r\n    \"website\": \"www.himmelevent.no\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/companies",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
