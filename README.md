@@ -26,7 +26,7 @@ This project will demonstrate my ability to implement **CRUD (Create, Read, Upda
 
 ## Endpoints
 
-Detailed description under **api-documentation.md**
+Detailed description in **api-documentation.md** file.
 
 ### Getting started
 
@@ -41,3 +41,12 @@ https://github.com/mariusrundereim/marius_dev_platforms_ca.git
 ```
 npm run start
 ```
+
+3. Import files in Postman
+
+- Import collection
+- Import environment (localhost or production)
+
+4. Then, use the application
+
+![Using the application](https://giphy.com/gifs/tv2norge-dance-celebration-birthday-duNowzaVje6Di3hnOu "Lets Celebrate!")
