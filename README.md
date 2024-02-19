@@ -49,4 +49,4 @@ npm run start
 
 4. Then, use the application
 
-![Using the application](https://giphy.com/embed/duNowzaVje6Di3hnOu "Lets Celebrate!")
+![Using the application](https://i.giphy.com/duNowzaVje6Di3hnOu.webp)
