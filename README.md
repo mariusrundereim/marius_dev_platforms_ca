@@ -1,6 +1,4 @@
-# Event Management API
-
-## Overview
+# Event Management API - CRUD
 
 Course Assignment for Development Platforms. Goal is to create and host a functional RESTful API.
 Focus will be to understand datastores and backend solutions commonly used in a full-stack web development.
@@ -28,34 +26,18 @@ This project will demonstrate my ability to implement **CRUD (Create, Read, Upda
 
 ## Endpoints
 
-### Events
+Detailed description under **api-documentation.md**
 
-- `GET /events`: List all events.
-- `POST /events`: Create a new event.
+### Getting started
 
-```json
-{
-  "price": 100,
-  "quantity": 1,
-  "attendeeId": "65ca47cac9a1cd5469eb8404"
-}
-```
-
-### Tickets
-
-- `POST /events/:eventId/tickets`: Create a ticket for an event.
-- `GET /events/:eventId/tickets`: List tickets for an event.
-
-### Attendees
-
-- `GET /attendees`: List all attendees.
-- `POST /attendees`: Register a new attendee.
-
-### Companies
-
-- `GET /companies`: List all companies.
-- `POST /companies`: Add a new company.
+1. Clone project
 
 ```
+https://github.com/mariusrundereim/marius_dev_platforms_ca.git
+```
 
+2. Start NPM
+
+```
+npm run start
 ```
