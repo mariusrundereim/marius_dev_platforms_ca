@@ -8,7 +8,6 @@ import {
 } from "../controllers/attendeesController.js";
 const router = express.Router();
 
-// Get all attendees
 router.get("/", getAllAttendees);
 router.get("/:id", getSingleAttendeeById);
 router.post("/", createAttendee);
